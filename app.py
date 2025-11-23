@@ -42,6 +42,22 @@ st.set_page_config(
 # This must be called after Streamlit is initialized
 load_api_keys()
 
+# Check for missing API keys and show errors
+from config import GROQ_API_KEY, GEMINI_API_KEY, OPENWEATHER_API_KEY
+
+missing_keys = []
+if not GROQ_API_KEY:
+    missing_keys.append("GROQ_API_KEY")
+if not GEMINI_API_KEY:
+    missing_keys.append("GEMINI_API_KEY")
+if not OPENWEATHER_API_KEY:
+    missing_keys.append("OPENWEATHER_API_KEY")
+
+if missing_keys:
+    st.error(f"⚠️ Missing API Keys: {', '.join(missing_keys)}. Please check your Secrets in Streamlit Cloud (Settings → Secrets) or your local .env file.")
+    st.info("💡 **To fix this:**\n1. Go to Streamlit Cloud → Settings → Secrets\n2. Add your API keys in this format:\n```toml\nGROQ_API_KEY = \"your_key_here\"\nGEMINI_API_KEY = \"your_key_here\"\nOPENWEATHER_API_KEY = \"your_key_here\"\n```\n3. Click 'Reboot App' after saving secrets.")
+    # Don't stop the app, but show the warning
+
 # Custom CSS for beautiful green-themed UI with animations
 st.markdown("""
 <style>
